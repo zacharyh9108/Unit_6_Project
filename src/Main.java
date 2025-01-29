@@ -1,12 +1,12 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.regex.*;
 
 public class Main {
     public static void main(String[] args) {
-        String[] hands = getFileData("src/InputFile");
-        System.out.println(Arrays.toString(hands));
+        String[] lines = getFileData("src/InputFile");
+        Main m = new Main();
+        System.out.println(m.partOne(lines));
     }
 
     public static String[] getFileData(String fileName) {
@@ -24,12 +24,6 @@ public class Main {
     }
 
     public String partOne(String[] file) {
-        String[] cards = {"Ace", "King", "Queen", "Jack"};
-        ArrayList<String> hands = new ArrayList(file.length);
-        for (int i = 0; i < hands.size(); i++) {
-            String index = hands.get(i);
-            String[] w = index.split("\\|");
-        }
         int fiveKind = 0;
         int fourKind = 0;
         int fullHouse = 0;
@@ -37,20 +31,57 @@ public class Main {
         int twoPair = 0;
         int pair = 0;
         int highCard = 0;
-        //Map<cards, hands> map = new HashMap<>();
-        return "\n" +
-                "Number of five of a kind hands: " + fiveKind + "\n" +
-                "Number of full house hands: " + fourKind + "\n" +
-                "Number of four of a kind hands: " + fullHouse + "\n" +
-                "Number of three of a kind hands: " + threeKind + "\n" +
-                "Number of two pair hands: " + twoPair + "\n" +
-                "Number of one pair hands: " + pair + "\n" +
-                "Number of high card hands: " + highCard;
 
+        for (String line : file) {
+            String[] parts = line.split("\\|");
+            if (parts.length < 1) continue;
+
+            String leftSide = parts[0].trim();
+            String[] cardLabels = leftSide.split(",");
+            if (cardLabels.length != 5) {
+                continue;
+            }
+
+            Map<String, Integer> frequencyMap = new HashMap<>();
+            for (String label : cardLabels) {
+                label = label.trim();
+                frequencyMap.put(label, frequencyMap.getOrDefault(label, 0) + 1);
+            }
+
+            ArrayList<Integer> freqs = new ArrayList<>(frequencyMap.values());
+            freqs.sort(Collections.reverseOrder());
+
+            if (freqs.size() == 1 && freqs.get(0) == 5) {
+                fiveKind++;
+            } else if (freqs.size() == 2) {
+                if (freqs.get(0) == 4) {
+                    fourKind++;
+                } else {
+                    fullHouse++;
+                }
+            } else if (freqs.size() == 3) {
+                if (freqs.get(0) == 3) {
+                    threeKind++;
+                } else {
+                    twoPair++;
+                }
+            } else if (freqs.size() == 4) {
+                pair++;
+            } else {
+                highCard++;
+            }
+        }
+
+        return "Number of five of a kind hands: " + fiveKind + "\n"
+                + "Number of full house hands: " + fullHouse + "\n"
+                + "Number of four of a kind hands: " + fourKind + "\n"
+                + "Number of three of a kind hands: " + threeKind + "\n"
+                + "Number of two pair hands: " + twoPair + "\n"
+                + "Number of one pair hands: " + pair + "\n"
+                + "Number of high card hands: " + highCard;
     }
 
     public String partTwo (String[] args){
         return " ";
     }
-
 }
