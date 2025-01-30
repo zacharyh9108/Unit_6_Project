@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Main {
-
     public static void main(String[] args) {
         String[] lines = getFileData("src/InputFile");
         Main m = new Main();
@@ -38,7 +37,7 @@ public class Main {
 
             String leftSide = parts[0].trim();
             String[] cardLabels = leftSide.split(",");
-
+            System.out.println(Arrays.toString(cardLabels));
             Map<String, Integer> frequencyMap = new HashMap<>();
             for (String label : cardLabels) {
                 label = label.trim();
@@ -46,8 +45,6 @@ public class Main {
             }
 
             ArrayList<Integer> freqs = new ArrayList<>(frequencyMap.values());
-            freqs.sort(Collections.reverseOrder());
-
             if (freqs.size() == 1 && freqs.getFirst() == 5) {
                 fiveKind++;
             } else if (freqs.size() == 2) {
@@ -68,7 +65,6 @@ public class Main {
                 highCard++;
             }
         }
-
         return "Number of five of a kind hands: " + fiveKind + "\n"
                 + "Number of full house hands: " + fullHouse + "\n"
                 + "Number of four of a kind hands: " + fourKind + "\n"
