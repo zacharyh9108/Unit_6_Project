@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Main {
+
     public static void main(String[] args) {
         String[] lines = getFileData("src/InputFile");
         Main m = new Main();
@@ -29,18 +30,18 @@ public class Main {
         int fullHouse = 0;
         int threeKind = 0;
         int twoPair = 0;
-        int pair = 0;
+        int onePair = 0;
         int highCard = 0;
 
         for (String line : file) {
             String[] parts = line.split("\\|");
-            if (parts.length < 1) continue;
+            if (parts.length == 0) continue;
 
             String leftSide = parts[0].trim();
+            if (leftSide.isEmpty()) continue;
+
             String[] cardLabels = leftSide.split(",");
-            if (cardLabels.length != 5) {
-                continue;
-            }
+            if (cardLabels.length != 5) continue;
 
             Map<String, Integer> frequencyMap = new HashMap<>();
             for (String label : cardLabels) {
@@ -48,40 +49,36 @@ public class Main {
                 frequencyMap.put(label, frequencyMap.getOrDefault(label, 0) + 1);
             }
 
-            ArrayList<Integer> freqs = new ArrayList<>(frequencyMap.values());
+            List<Integer> freqs = new ArrayList<>(frequencyMap.values());
             freqs.sort(Collections.reverseOrder());
 
-            if (freqs.size() == 1 && freqs.get(0) == 5) {
+            if (freqs.equals(Arrays.asList(5))) {
                 fiveKind++;
-            } else if (freqs.size() == 2) {
-                if (freqs.get(0) == 4) {
-                    fourKind++;
-                } else {
-                    fullHouse++;
-                }
-            } else if (freqs.size() == 3) {
-                if (freqs.get(0) == 3) {
-                    threeKind++;
-                } else {
-                    twoPair++;
-                }
-            } else if (freqs.size() == 4) {
-                pair++;
-            } else {
+            } else if (freqs.equals(Arrays.asList(4, 1))) {
+                fourKind++;
+            } else if (freqs.equals(Arrays.asList(3, 2))) {
+                fullHouse++;
+            } else if (freqs.equals(Arrays.asList(3, 1, 1))) {
+                threeKind++;
+            } else if (freqs.equals(Arrays.asList(2, 2, 1))) {
+                twoPair++;
+            } else if (freqs.equals(Arrays.asList(2, 1, 1, 1))) {
+                onePair++;
+            } else if (freqs.equals(Arrays.asList(1, 1, 1, 1, 1))) {
                 highCard++;
             }
         }
 
         return "Number of five of a kind hands: " + fiveKind + "\n"
-                + "Number of full house hands: " + fullHouse + "\n"
-                + "Number of four of a kind hands: " + fourKind + "\n"
-                + "Number of three of a kind hands: " + threeKind + "\n"
-                + "Number of two pair hands: " + twoPair + "\n"
-                + "Number of one pair hands: " + pair + "\n"
-                + "Number of high card hands: " + highCard;
+             + "Number of full house hands: " + fullHouse + "\n"
+             + "Number of four of a kind hands: " + fourKind + "\n"
+             + "Number of three of a kind hands: " + threeKind + "\n"
+             + "Number of two pair hands: " + twoPair + "\n"
+             + "Number of one pair hands: " + onePair + "\n"
+             + "Number of high card hands: " + highCard;
     }
 
-    public String partTwo (String[] args){
+    public String partTwo(String[] args) {
         return " ";
     }
 }
