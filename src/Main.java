@@ -25,6 +25,7 @@ public class Main {
         }
     }
 
+    // Parses the Array that contains the file data in order to reduce redundancy
     public List<String[]> parseHands(String[] file) {
         List<String[]> result = new ArrayList<>();
         if (file == null) return result;
@@ -44,14 +45,13 @@ public class Main {
             if (cardLabels.length < 5) {
                 continue;
             }
-            String bidStr = parts[1].trim();
             result.add(new String[] {
                     cardLabels[0].trim(),
                     cardLabels[1].trim(),
                     cardLabels[2].trim(),
                     cardLabels[3].trim(),
                     cardLabels[4].trim(),
-                    bidStr
+                    parts[1].trim()
             });
         }
         return result;
@@ -107,11 +107,11 @@ public class Main {
 
     public String partTwo(String[] file) {
         Map<String, Integer> cardValue = new HashMap<>();
-        cardValue.put("Ace",   14);
-        cardValue.put("King",  13);
-        cardValue.put("Queen", 12);
-        cardValue.put("Jack",  11);
-        cardValue.put("10",    10);
+        cardValue.put("Ace",  14);
+        cardValue.put("King", 13);
+        cardValue.put("Queen",12);
+        cardValue.put("Jack", 11);
+        cardValue.put("10",   10);
         cardValue.put("9",     9);
         cardValue.put("8",     8);
         cardValue.put("7",     7);
@@ -136,22 +136,7 @@ public class Main {
             }
             List<Integer> freqs = new ArrayList<>(freqMap.values());
             Collections.sort(freqs, Collections.reverseOrder());
-            int type;
-            if (freqs.get(0) == 5) {
-                type = 7;
-            } else if (freqs.get(0) == 4) {
-                type = 6;
-            } else if (freqs.get(0) == 3 && freqs.size() > 1 && freqs.get(1) == 2) {
-                type = 5;
-            } else if (freqs.get(0) == 3) {
-                type = 4;
-            } else if (freqs.get(0) == 2 && freqs.size() > 1 && freqs.get(1) == 2) {
-                type = 3;
-            } else if (freqs.get(0) == 2) {
-                type = 2;
-            } else {
-                type = 1;
-            }
+            int type = getType(freqs);
 
             int[] intCards = new int[5];
             for (int i = 0; i < 5; i++) {
@@ -194,20 +179,20 @@ public class Main {
 
     public String partThree(String[] file) {
         String[] labelsForWild = { "Ace","King","Queen","10","9","8","7","6","5","4","3","2" };
-        Map<String,Integer> tieValue = new HashMap<>();
-        tieValue.put("Ace",   14);
-        tieValue.put("King",  13);
-        tieValue.put("Queen", 12);
-        tieValue.put("10",    10);
-        tieValue.put("9",     9);
-        tieValue.put("8",     8);
-        tieValue.put("7",     7);
-        tieValue.put("6",     6);
-        tieValue.put("5",     5);
-        tieValue.put("4",     4);
-        tieValue.put("3",     3);
-        tieValue.put("2",     2);
-        tieValue.put("Jack",  1);
+        Map<String,Integer> cardValue = new HashMap<>();
+        cardValue.put("Ace",  14);
+        cardValue.put("King", 13);
+        cardValue.put("Queen",12);
+        cardValue.put("10",   10);
+        cardValue.put("9",     9);
+        cardValue.put("8",     8);
+        cardValue.put("7",     7);
+        cardValue.put("6",     6);
+        cardValue.put("5",     5);
+        cardValue.put("4",     4);
+        cardValue.put("3",     3);
+        cardValue.put("2",     2);
+        cardValue.put("Jack",  1);
 
         List<Integer> handTypes = new ArrayList<>();
         List<int[]> cardLists = new ArrayList<>();
@@ -233,18 +218,11 @@ public class Main {
                 }
                 List<Integer> freqs = new ArrayList<>(freqMap.values());
                 Collections.sort(freqs, Collections.reverseOrder());
-                int type;
-                if (freqs.get(0) == 5) type = 7;
-                else if (freqs.get(0) == 4) type = 6;
-                else if (freqs.get(0) == 3 && freqs.size() > 1 && freqs.get(1) == 2) type = 5;
-                else if (freqs.get(0) == 3) type = 4;
-                else if (freqs.get(0) == 2 && freqs.size() > 1 && freqs.get(1) == 2) type = 3;
-                else if (freqs.get(0) == 2) type = 2;
-                else type = 1;
+                int type = getType(freqs);
 
                 int[] tieCards = new int[5];
                 for (int i = 0; i < 5; i++) {
-                    tieCards[i] = tieValue.get(cardLabels[i]);
+                    tieCards[i] = cardValue.get(cardLabels[i]);
                 }
                 handTypes.add(type);
                 cardLists.add(tieCards);
@@ -269,24 +247,19 @@ public class Main {
 
                     List<Integer> freqs = new ArrayList<>(freqMap.values());
                     Collections.sort(freqs, Collections.reverseOrder());
-                    int type;
-                    if (freqs.get(0) == 5) type = 7;
-                    else if (freqs.get(0) == 4) type = 6;
-                    else if (freqs.get(0) == 3 && freqs.size() > 1 && freqs.get(1) == 2) type = 5;
-                    else if (freqs.get(0) == 3) type = 4;
-                    else if (freqs.get(0) == 2 && freqs.size() > 1 && freqs.get(1) == 2) type = 3;
-                    else if (freqs.get(0) == 2) type = 2;
-                    else type = 1;
+                    int type = getType(freqs);
 
                     if (type > bestType) {
                         bestType = type;
                     }
-                    if (bestType == 7) break;
+                    if (bestType == 7) {
+                        break;
+                    }
                 }
 
                 int[] tieArr = new int[5];
                 for (int i = 0; i < 5; i++) {
-                    tieArr[i] = tieValue.get(cardLabels[i]);
+                    tieArr[i] = cardValue.get(cardLabels[i]);
                 }
                 handTypes.add(bestType);
                 cardLists.add(tieArr);
@@ -320,5 +293,32 @@ public class Main {
             totalValue += (long)(rank + 1) * bids.get(idx);
         }
         return "Total Bid Value With Jacks Wild: " + totalValue;
+    }
+
+    // Determines the type of hand in order to reduce redundancy
+    public int getType(List<Integer> freqs) {
+        int type;
+        if (freqs.get(0) == 5) {
+            type = 7;
+        }
+        else if (freqs.get(0) == 4) {
+            type = 6;
+        }
+        else if (freqs.get(0) == 3 && freqs.size() > 1 && freqs.get(1) == 2) {
+            type = 5;
+        }
+        else if (freqs.get(0) == 3) {
+            type = 4;
+        }
+        else if (freqs.get(0) == 2 && freqs.size() > 1 && freqs.get(1) == 2) {
+            type = 3;
+        }
+        else if (freqs.get(0) == 2) {
+            type = 2;
+        }
+        else {
+            type = 1;
+        }
+        return type;
     }
 }
