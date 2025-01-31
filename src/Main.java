@@ -66,7 +66,6 @@ public class Main {
         int pair = 0;
         int highCard = 0;
 
-        // Use the new parseHands function
         List<String[]> hands = parseHands(file);
         for (String[] h : hands) {
             String[] cardLabels = Arrays.copyOfRange(h, 0, 5);
@@ -126,7 +125,6 @@ public class Main {
         List<int[]> cardLists = new ArrayList<>();
         List<Integer> bids = new ArrayList<>();
 
-        // Use the new parseHands function
         List<String[]> hands = parseHands(file);
         for (String[] h : hands) {
             String[] cardLabels = Arrays.copyOfRange(h, 0, 5);
