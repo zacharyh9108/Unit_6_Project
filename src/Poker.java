@@ -1,16 +1,16 @@
 import java.util.*;
 
 public class Poker {
+    private int fiveKind;
+    private int fourKind;
+    private int fullHouse;
+    private int threeKind;
+    private int twoPair;
+    private int pair;
+    private int highCard;
+    private int totalValue;
 
-    public String partOne(String[] file) {
-        int fiveKind = 0;
-        int fourKind = 0;
-        int fullHouse = 0;
-        int threeKind = 0;
-        int twoPair = 0;
-        int pair = 0;
-        int highCard = 0;
-
+    public void partOne(String[] file) {
         List<String[]> hands = parseHands(file);
         for (String[] h : hands) {
             String[] cardLabels = Arrays.copyOfRange(h, 0, 5);
@@ -40,17 +40,10 @@ public class Poker {
                 highCard++;
             }
         }
-
-        return "Number of five of a kind hands: " + fiveKind + "\n"
-                + "Number of full house hands: " + fullHouse + "\n"
-                + "Number of four of a kind hands: " + fourKind + "\n"
-                + "Number of three of a kind hands: " + threeKind + "\n"
-                + "Number of two pair hands: " + twoPair + "\n"
-                + "Number of one pair hands: " + pair + "\n"
-                + "Number of high card hands: " + highCard + "\n";
     }
 
-    public String partTwo(String[] file) {
+    public void partTwo(String[] file) {
+        totalValue = 0;
         Map<String, Integer> cardValue = new HashMap<>();
         cardValue.put("Ace",  14);
         cardValue.put("King", 13);
@@ -114,16 +107,15 @@ public class Poker {
             return 0;
         });
 
-        long totalValue = 0;
         for (int rank = 0; rank < indices.size(); rank++) {
             int idx = indices.get(rank);
-            totalValue += (long) (rank + 1) * bids.get(idx);
+            totalValue += (rank + 1) * bids.get(idx);
         }
-        return "Total Bid Value: " + totalValue;
     }
 
-    public String partThree(String[] file) {
-        String[] labelsForWild = { "Ace","King","Queen","10","9","8","7","6","5","4","3","2" };
+    public void partThree(String[] file) {
+        totalValue = 0;
+        String[] labelsForWild = {"Ace","King","Queen","10","9","8","7","6","5","4","3","2" };
         Map<String,Integer> cardValue = new HashMap<>();
         cardValue.put("Ace",  14);
         cardValue.put("King", 13);
@@ -232,12 +224,10 @@ public class Poker {
             return 0;
         });
 
-        long totalValue = 0;
         for (int rank = 0; rank < indices.size(); rank++) {
             int idx = indices.get(rank);
-            totalValue += (long)(rank + 1) * bids.get(idx);
+            totalValue += (rank + 1) * bids.get(idx);
         }
-        return "Total Bid Value With Jacks Wild: " + totalValue;
     }
 
     // Parses the Array that contains the file data in order to reduce redundancy
@@ -297,5 +287,37 @@ public class Poker {
             type = 1;
         }
         return type;
+    }
+
+    public int getFiveKind() {
+        return fiveKind;
+    }
+
+    public int getFourKind() {
+        return fourKind;
+    }
+
+    public int getFullHouse() {
+        return fullHouse;
+    }
+
+    public int getThreeKind() {
+        return threeKind;
+    }
+
+    public int getTwoPair() {
+        return twoPair;
+    }
+
+    public int getPair() {
+        return pair;
+    }
+
+    public int getHighCard() {
+        return highCard;
+    }
+
+    public int getTotalValue() {
+        return totalValue;
     }
 }
